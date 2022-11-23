@@ -5,4 +5,5 @@
 # include <stdlib.h>
 # include <unistd.h>
 
+char	*get_net_line(int fd);
 #endif
