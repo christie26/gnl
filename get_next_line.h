@@ -4,7 +4,17 @@
 
 # include <stdlib.h>
 
+typedef struct s_chr
+{
+	char	*ptr;
+    size_t  idx;
+}	t_chr;
+
 char	*get_net_line(int fd);
 size_t	ft_strlen(const char *str);
-char	*ft_strchr(const char *s, int c);
+t_chr   ft_strchr(const char *s, int c);
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
+char	*ft_strdup(const char *src);
+size_t	ft_strlcat(char *dst, const char *src, size_t size);
+
 #endif
