@@ -1,10 +1,8 @@
 
 #include "get_next_line.h"
-#include <stdio.h>
-#include <fcntl.h>
 #define BUFFER_SIZE 1
 
-char *ft_update(char *res, char *buf, size_t len)
+int	ft_update(char *res, char *buf, size_t len)
 {
 	char *tmp;
 
@@ -27,50 +25,56 @@ char *ft_update(char *res, char *buf, size_t len)
 		ft_strlcpy(res, buf, len + 1);
 	}
 	res[len] = 0;
-	return (res);
+	return (1);
+}
+
+int	ft_read_line(char *res, char *buf, size_t len, int fd)
+{
+	t_chr	chr;
+	int		val;
+
+	val = read(fd, buf, BUFFER_SIZE);
+	if (val == -1)
+		return (0);
+	buf[BUFFER_SIZE] = 0;			// file ends before BUFFER_SIZE
+	chr = ft_strchr(buf, '\n');
+	if (chr.ptr)
+	{
+		len += chr.idx;
+		val = ft_update(res, buf, len);
+		if (val == 0)
+			return (0);	
+		return (1);
+	}
+	else
+	{
+		len += BUFFER_SIZE;
+		val = ft_update(res, buf, len);
+		if (val == 0)
+			return (0);	
+	}
+	return (2);
 }
 
 char *get_next_line(int fd)
 {
-	char	*buf;
-	char	*res;
-	size_t	len;
-	t_chr	chr;
+	char		*buf;
+	static char	*res;
+	int			val;
 
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (0);
 	buf = (char *)malloc(BUFFER_SIZE + 1);
 	if (!buf)
 		return (0);
-	len = 0;
 	res = 0;
 	while (1)
 	{
-		read(fd, buf, BUFFER_SIZE);
-		buf[BUFFER_SIZE] = 0;
-		chr = ft_strchr(buf, '\n');
-		if (chr.ptr)	//chr.ptr is not null -> stop 
-		{
-			len += chr.idx;
-			res = ft_update(res, buf, len);
-			if (!res)
-				return (0);	
-			break;
-		}
-		else // keep going 
-		{
-			len += BUFFER_SIZE;
-			res = ft_update(res, buf, len);
-			if (!res)
-				return (0);	
-		}	
+		val = ft_read_line(res, buf, 0, fd);
+		if (val == 0)
+			return (0);
+		else if (val == 1)
+			break ;
 	}
 	return (res); 
-}
-
-int main(void)
-{
-	char	*res;
-	int		fd;
-	fd = open("./text.txt", O_RDONLY);
-	res = get_next_line(fd);
-	printf("result is %s\n", res);
 }
