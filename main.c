@@ -2,11 +2,14 @@
 #include <stdio.h>
 #include <fcntl.h>
 
-int main(void)
+int	main(int ac, char **av)
 {
 	char	*res;
 	int		fd;
-	fd = open("./text.txt", O_RDONLY);
+
+	(void)ac;
+	(void)av;
+	fd = open("nl", O_RDONLY);
 	res = get_next_line(fd);
 	printf("result is %s\n", res);
 }

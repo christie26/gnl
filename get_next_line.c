@@ -12,7 +12,7 @@
 
 #include "get_next_line.h"
 
-int	ft_update(char *res, char *buf, size_t len)
+char *ft_update(char *res, char *buf, size_t len)
 {
 	char	*tmp;
 
@@ -35,42 +35,35 @@ int	ft_update(char *res, char *buf, size_t len)
 		ft_strlcpy(res, buf, len + 1);
 	}
 	res[len] = 0;
-	return (1);
+	return (res);
 }
 
-int	ft_read_line(char *res, char *buf, size_t len, int fd)
+int	ft_read_line(char *buf, size_t *len, int fd)
 {
 	t_chr	chr;
 	int		val;
 
 	val = read(fd, buf, BUFFER_SIZE);
-	if (val == -1 || val == 0)
+	if (val == -1 || val == 0) // invalid or empty file -> problem when file end free buf  
 		return (0);
 	buf[BUFFER_SIZE] = 0;
 	chr = ft_strchr(buf, '\n');
 	if (chr.ptr)
 	{
-		len += chr.idx;
-		val = ft_update(res, buf, len);
-		if (val == 0)
-			return (0);
+		*len += (chr.idx + 1);
 		return (1);
 	}
 	else
-	{
-		len += BUFFER_SIZE;
-		val = ft_update(res, buf, len);
-		if (val == 0)
-			return (0);
-	}
+		*len += BUFFER_SIZE;
 	return (2);
 }
 
 char	*get_next_line(int fd)
 {
-	char		*buf;
-	static char	*res;
-	int			val;
+	char			*buf;
+	static char		*res;
+	int				val;
+	static size_t	len;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (0);
@@ -78,13 +71,21 @@ char	*get_next_line(int fd)
 	if (!buf)
 		return (0);
 	res = 0;
+	len = 0;
 	while (1)
 	{
-		val = ft_read_line(res, buf, 0, fd);
-		if (val == 0)
-			return (0);
-		else if (val == 1)
+		val = ft_read_line(buf, &len, fd);
+		if (val == 1) //when they meet new line 
+		{
+			res = ft_update(res, buf, len);
 			break ;
+		}
+		else if (val == 0)
+			break ;
+		else
+			res = ft_update(res, buf, len);
 	}
+	if (res == 0 || val == 0)
+		free(buf);
 	return (res);
 }

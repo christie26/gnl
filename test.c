@@ -3,11 +3,11 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
-	int	fd;
-	int rd;
-	char *buf;
+	int		fd;
+	int		rd;
+	char	*buf;
 
 	(void)ac;
 	buf = (char *)malloc(BUFFER);
