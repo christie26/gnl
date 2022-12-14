@@ -22,31 +22,26 @@ size_t	ft_strlen(const char *str)
 	return (i);
 }
 
-t_chr	ft_strchr(const char *s, int c)
+// return null if they can't find the key
+char	*ft_strchr(const char *s, int c)
 {
 	char	key;
 	char	*src;
 	size_t	i;
 	size_t	len_src;
-	t_chr	res;
 
 	src = (char *) s;
 	len_src = ft_strlen(src);
 	key = c;
 	i = 0;
-	res.ptr = 0;
-	res.idx = 0;
-	while (i < len_src)
+	while (i < len_src + 1)
 	{
-		if (src[i] == key)
-		{
-			res.ptr = src;
-			res.idx = i;
-			return (res);
-		}
+		if (*src == key)
+			return (src);
+		src++;
 		i++;
 	}
-	return (res);
+	return (0);
 }
 
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
@@ -105,4 +100,26 @@ size_t	ft_strlcat(char *dst, const char *src, size_t size)
 	}
 	dst[len_dst + i] = 0;
 	return (len_dst + len_src);
+}
+
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	char	*dst;
+	size_t	len_s1;
+	size_t	len_s2;
+	size_t	total;
+
+	len_s1 = ft_strlen((char *)s1);
+	len_s2 = ft_strlen((char *)s2);
+	total = len_s1 + len_s2;
+	dst = (char *)malloc(sizeof(char) * (total + 1));
+	if (!dst)
+		return (0);
+	while (len_s1--)
+		*dst++ = *s1++;
+	while (len_s2--)
+		*dst++ = *s2++;
+	*dst = 0;
+	dst -= total;
+	return (dst);
 }

@@ -24,9 +24,10 @@ typedef struct s_chr
 
 char	*get_next_line(int fd);
 size_t	ft_strlen(const char *str);
-t_chr	ft_strchr(const char *s, int c);
+char	*ft_strchr(const char *s, int c);
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
 char	*ft_strdup(const char *src);
 size_t	ft_strlcat(char *dst, const char *src, size_t size);
+char	*ft_strjoin(const char *s1, const char *s2);
 
 #endif

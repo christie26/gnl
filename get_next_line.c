@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
+/*
 char *ft_update(char *res, char *buf, size_t len)
 {
 	char	*tmp;
@@ -37,20 +37,19 @@ char *ft_update(char *res, char *buf, size_t len)
 	res[len] = 0;
 	return (res);
 }
+*/
 
 int	ft_read_line(char *buf, size_t *len, int fd)
 {
-	t_chr	chr;
 	int		val;
 
 	val = read(fd, buf, BUFFER_SIZE);
-	if (val == -1 || val == 0) // invalid or empty file -> problem when file end free buf  
+	if (val == -1 || val == 0) 
 		return (0);
 	buf[BUFFER_SIZE] = 0;
-	chr = ft_strchr(buf, '\n');
-	if (chr.ptr)
+	if (ft_strchr(buf, '\n'))
 	{
-		*len += (chr.idx + 1);
+		*len += (ft_strchr(buf, '\n') - buf);
 		return (1);
 	}
 	else
@@ -58,6 +57,7 @@ int	ft_read_line(char *buf, size_t *len, int fd)
 	return (2);
 }
 
+// how about add one more parameter "len" in strjoin ?
 char	*get_next_line(int fd)
 {
 	char			*buf;
@@ -72,18 +72,16 @@ char	*get_next_line(int fd)
 		return (0);
 	res = 0;
 	len = 0;
-	while (1)
+	val = 2;
+	while (val == 2)
 	{
 		val = ft_read_line(buf, &len, fd);
-		if (val == 1) //when they meet new line 
-		{
-			res = ft_update(res, buf, len);
-			break ;
-		}
-		else if (val == 0)
-			break ;
+		if (val == 1)
+			res = ft_strjoin(res, buf);
+		//	res = ft_update(res, buf, len);
 		else
-			res = ft_update(res, buf, len);
+			res = ft_strjoin(res, buf);
+		//	res = ft_update(res, buf, len);
 	}
 	if (res == 0 || val == 0)
 		free(buf);
