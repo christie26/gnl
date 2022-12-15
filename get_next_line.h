@@ -6,7 +6,7 @@
 /*   By: yoonsele <yoonsele@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/03 12:00:22 by yoonsele          #+#    #+#             */
-/*   Updated: 2022/12/03 18:05:57 by yoonsele         ###   ########.fr       */
+/*   Updated: 2022/12/15 17:08:07 by yoonsele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,7 @@
 
 # include <stdlib.h>
 # include <unistd.h>
-
-typedef struct s_chr
-{
-	char	*ptr;
-	size_t	idx;
-}	t_chr;
+# include <limits.h>
 
 char	*get_next_line(int fd);
 size_t	ft_strlen(const char *str);
@@ -29,5 +24,9 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
 char	*ft_strdup(const char *src);
 size_t	ft_strlcat(char *dst, const char *src, size_t size);
 char	*ft_strjoin(const char *s1, const char *s2);
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE=1024
+# endif
 
 #endif

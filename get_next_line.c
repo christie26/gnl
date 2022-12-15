@@ -6,7 +6,7 @@
 /*   By: yoonsele <yoonsele@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/03 12:00:07 by yoonsele          #+#    #+#             */
-/*   Updated: 2022/12/03 18:05:03 by yoonsele         ###   ########.fr       */
+/*   Updated: 2022/12/15 17:08:05 by yoonsele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ char	*get_next_line(int fd)
 	int				val;
 	static size_t	len;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || fd > OPEN_MAX || BUFFER_SIZE <= 0)
 		return (0);
 	buf = (char *)malloc(BUFFER_SIZE + 1);
 	if (!buf)
