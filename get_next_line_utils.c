@@ -44,25 +44,46 @@ char	*ft_strchr(const char *s, int c)
 	return (0);
 }
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+char	*ft_strndup(const char *src, size_t len)
 {
-	size_t	len_src;
-	size_t	i;
-	char	*s;
+//	size_t	len;
+	char	*new;
+	char	*tmp;
 
-	s = (char *)src;
-	i = 0;
-	len_src = ft_strlen(s);
-	while (i + 1 < dstsize && src[i])
-	{
-		dst[i] = src[i];
-		i++;
-	}
-	if (dstsize > 0)
-		dst[i] = 0;
-	return (len_src);
+//	len = ft_strlen((char *)src);
+	new = (char *)malloc((len + 1) * sizeof(char));
+	if (!(new))
+		return (0);
+	tmp = new;
+	while (*src && *src != '\n')
+		*tmp++ = *src++;
+	*tmp = 0;
+	return (new);
 }
 
+char	*ft_strnjoin(char const *s1, char const *s2, size_t len)
+{
+	char	*dst;
+	size_t	len_s1;
+//	size_t	len_s2;
+	size_t	total;
+
+	len_s1 = ft_strlen((char *)s1);
+//	len_s2 = ft_strlen((char *)s2);
+	total = len_s1 + len;
+	dst = (char *)malloc(sizeof(char) * (total + 1));
+	if (!dst)
+		return (0);
+	while (len_s1--)
+		*dst++ = *s1++;
+	while (len--)
+		*dst++ = *s2++;
+//	free((void *)s1);
+	*dst = 0;
+	dst -= total;
+	return (dst);
+}
+/*
 char	*ft_strdup(const char *src)
 {
 	size_t	len;
@@ -78,28 +99,6 @@ char	*ft_strdup(const char *src)
 		*tmp++ = *src++;
 	*tmp = 0;
 	return (new);
-}
-
-size_t	ft_strlcat(char *dst, const char *src, size_t size)
-{
-	size_t	len_dst;
-	size_t	len_src;
-	size_t	i;
-
-	len_dst = ft_strlen(dst);
-	len_src = ft_strlen((char *)src);
-	i = 0;
-	if (size == 0)
-		return (len_src);
-	if (size <= len_dst)
-		return (size + len_src);
-	while (src[i] && len_dst + 1 + i < size)
-	{
-		dst[len_dst + i] = src[i];
-		i++;
-	}
-	dst[len_dst + i] = 0;
-	return (len_dst + len_src);
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)
@@ -123,3 +122,4 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	dst -= total;
 	return (dst);
 }
+*/

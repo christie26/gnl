@@ -9,7 +9,7 @@ int	main(int ac, char **av)
 
 	(void)ac;
 	(void)av;
-	fd = open("nl", O_RDONLY);
+	fd = open("test_file/test", O_RDONLY);
 	res = get_next_line(fd);
 	printf("result is %s\n", res);
 }
