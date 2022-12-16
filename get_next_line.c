@@ -13,44 +13,59 @@
 #include "get_next_line.h"
 #include <stdio.h>
 
-int	ft_read_buffer(char *buf, char **res, int fd)
+char *ft_read_buffer(char *buf, char 	*res, int fd)
 {
 	ssize_t	read_size;
-	ssize_t	len;
 
 	read_size = read(fd, buf, BUFFER_SIZE);
 	if (read_size == -1 || read_size == 0)
 		return (0); 
 	buf[read_size] = 0; 
-	if (ft_strchr(buf, '\n'))
-		len = (ft_strchr(buf, '\n') - buf);
+	if (!(res)) 
+		res = ft_strdup(buf);
 	else
-		len = read_size;
-//	printf("len is %zu\n", len);
-	if (!(*res)) //only initial called 
-		*res = ft_strndup(buf, len);
-	else
-		*res = ft_strnjoin(*res, buf, len);
-	if (len != read_size)
-		return (1);
-	else
-		return (2);
+		res = ft_strjoin(res, buf);
+	return (res);
+}
+
+char	*ft_remove_line(char *sto, char *line)
+{
+	size_t	len;
+	char	*tmp;
+	char	*new;
+
+	len = ft_strlen(line);
+	tmp = sto + len;
+	new = ft_strdup(tmp);
+	free (sto);
+	sto = 0;
+	return (new);
 }
 
 char	*get_next_line(int fd)
 {
 	char		*buf;
-	static char	*tab;
-	int			val;
+	static char	*sto;
+	char		*line;
 
 	if (fd < 0 || fd > OPEN_MAX || BUFFER_SIZE <= 0)
 		return (0);
 	buf = (char *)malloc(BUFFER_SIZE + 1);
 	if (!buf)
 		return (0);
-	val = 2;
-	while (val == 2)
-		val = ft_read_buffer(buf, &tab, fd);
+	while (!ft_strchr(buf, '\n'))
+	{
+		sto = ft_read_buffer(buf, sto, fd);
+		if (!sto) //error
+		{
+			free(buf);
+			buf = 0;
+			return (0);
+		}		
+	}
 	free(buf);
-	return (tab);
+	buf = 0;
+	line = ft_strndup(sto);
+	sto = ft_remove_line(sto, line);
+	return (line);
 }

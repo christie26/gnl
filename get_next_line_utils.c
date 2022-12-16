@@ -12,7 +12,7 @@
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *str)
+size_t	ft_strlen(char *str)
 {
 	size_t	i;
 
@@ -22,8 +22,7 @@ size_t	ft_strlen(const char *str)
 	return (i);
 }
 
-// return null if they can't find the key
-char	*ft_strchr(const char *s, int c)
+char	*ft_strchr(char *s, int c)
 {
 	char	key;
 	char	*src;
@@ -44,47 +43,7 @@ char	*ft_strchr(const char *s, int c)
 	return (0);
 }
 
-char	*ft_strndup(const char *src, size_t len)
-{
-//	size_t	len;
-	char	*new;
-	char	*tmp;
-
-//	len = ft_strlen((char *)src);
-	new = (char *)malloc((len + 1) * sizeof(char));
-	if (!(new))
-		return (0);
-	tmp = new;
-	while (*src && *src != '\n')
-		*tmp++ = *src++;
-	*tmp = 0;
-	return (new);
-}
-
-char	*ft_strnjoin(char const *s1, char const *s2, size_t len)
-{
-	char	*dst;
-	size_t	len_s1;
-//	size_t	len_s2;
-	size_t	total;
-
-	len_s1 = ft_strlen((char *)s1);
-//	len_s2 = ft_strlen((char *)s2);
-	total = len_s1 + len;
-	dst = (char *)malloc(sizeof(char) * (total + 1));
-	if (!dst)
-		return (0);
-	while (len_s1--)
-		*dst++ = *s1++;
-	while (len--)
-		*dst++ = *s2++;
-//	free((void *)s1);
-	*dst = 0;
-	dst -= total;
-	return (dst);
-}
-/*
-char	*ft_strdup(const char *src)
+char	*ft_strdup(char *src)
 {
 	size_t	len;
 	char	*new;
@@ -95,13 +54,13 @@ char	*ft_strdup(const char *src)
 	if (!(new))
 		return (0);
 	tmp = new;
-	while (*src)
+	while (*src && *src != '\n')
 		*tmp++ = *src++;
 	*tmp = 0;
 	return (new);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*dst;
 	size_t	len_s1;
@@ -115,11 +74,31 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	if (!dst)
 		return (0);
 	while (len_s1--)
-		*dst++ = *s1++;
+		*(dst++) = *(s1++);
 	while (len_s2--)
-		*dst++ = *s2++;
+		*(dst++) = *(s2++);
+	free((void *)s1);
+	s1 = 0;
 	*dst = 0;
 	dst -= total;
 	return (dst);
 }
-*/
+
+char	*ft_strndup(char *src)
+{
+	size_t	len;
+	char	*new;
+	char	*tmp;
+
+	len = ft_strlen((char *)src);
+	new = (char *)malloc((len + 1) * sizeof(char));
+	if (!(new))
+		return (0);
+	tmp = new;
+	while (*src && *src != '\n')
+		*tmp++ = *src++;
+	*tmp = 0;
+//	free(src);
+//	src = 0;
+	return (new);
+}
