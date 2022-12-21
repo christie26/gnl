@@ -22,6 +22,7 @@ size_t	ft_strlen(char *str);
 char	*ft_strchr(char *s, int c);
 char	*ft_strdup(char *src);
 char	*ft_strndup(char *src);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strjoin(char *s1, char *s2);
 
 # ifndef BUFFER_SIZE

@@ -13,40 +13,35 @@
 #include "get_next_line.h"
 #include <stdio.h>
 
-char *ft_read_buffer(char *buf, char 	*res, int fd)
+char	*ft_read_buffer(char *buf, char *res, int fd)
 {
 	ssize_t	read_size;
 
 	read_size = read(fd, buf, BUFFER_SIZE);
 	if (read_size == -1 || read_size == 0)
-		return (0); 
-	buf[read_size] = 0; 
-	if (!(res)) 
+		return (0);
+	buf[read_size] = 0;
+	if (!res)
 		res = ft_strdup(buf);
 	else
 		res = ft_strjoin(res, buf);
 	return (res);
 }
 
-char	*ft_remove_line(char *sto, char *line)
+char	*ft_free(char *buf)
 {
-	size_t	len;
-	char	*tmp;
-	char	*new;
-
-	len = ft_strlen(line);
-	tmp = sto + len;
-	new = ft_strdup(tmp);
-	free (sto);
-	sto = 0;
-	return (new);
+	free(buf);
+	buf = 0;
+	return (0);
 }
 
 char	*get_next_line(int fd)
 {
-	char		*buf;
 	static char	*sto;
+	char		*buf;
 	char		*line;
+	char		*tmp;
+	size_t		n;
 
 	if (fd < 0 || fd > OPEN_MAX || BUFFER_SIZE <= 0)
 		return (0);
@@ -56,16 +51,14 @@ char	*get_next_line(int fd)
 	while (!ft_strchr(buf, '\n'))
 	{
 		sto = ft_read_buffer(buf, sto, fd);
-		if (!sto) //error
-		{
-			free(buf);
-			buf = 0;
-			return (0);
-		}		
+		if (!sto)
+			return (ft_free(buf));
 	}
-	free(buf);
-	buf = 0;
-	line = ft_strndup(sto);
-	sto = ft_remove_line(sto, line);
+	ft_free(buf);
+	tmp = sto;
+	n = ft_strchr(sto, '\n') - sto;
+	line = ft_substr(sto, 0, n);
+	sto = ft_substr(sto, n, ft_strlen(sto));
+	free(tmp);
 	return (line);
 }

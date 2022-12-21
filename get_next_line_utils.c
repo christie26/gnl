@@ -84,21 +84,26 @@ char	*ft_strjoin(char *s1, char *s2)
 	return (dst);
 }
 
-char	*ft_strndup(char *src)
+char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-	size_t	len;
-	char	*new;
-	char	*tmp;
+	char	*dst;
+	size_t	i;
+	size_t	j;
 
-	len = ft_strlen((char *)src);
-	new = (char *)malloc((len + 1) * sizeof(char));
-	if (!(new))
+	dst = (char *)malloc(sizeof(char) * (len + 1));
+	if (!dst)
 		return (0);
-	tmp = new;
-	while (*src && *src != '\n')
-		*tmp++ = *src++;
-	*tmp = 0;
-//	free(src);
-//	src = 0;
-	return (new);
+	i = 0;
+	j = 0;
+	while (s[j] && i < len)
+	{
+		if (j < start)
+		{
+			j++;
+			continue ;
+		}
+		dst[i++] = s[j++];
+	}
+	dst[i] = 0;
+	return (dst);
 }
