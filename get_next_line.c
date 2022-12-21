@@ -13,26 +13,33 @@
 #include "get_next_line.h"
 #include <stdio.h>
 
-char	*ft_read_buffer(char *buf, char *res, int fd)
-{
-	ssize_t	read_size;
-
-	read_size = read(fd, buf, BUFFER_SIZE);
-	if (read_size == -1 || read_size == 0)
-		return (0);
-	buf[read_size] = 0;
-	if (!res)
-		res = ft_strdup(buf);
-	else
-		res = ft_strjoin(res, buf);
-	return (res);
-}
-
 char	*ft_free(char *buf)
 {
 	free(buf);
 	buf = 0;
 	return (0);
+}
+
+char	*ft_read_buffer(char *buf, char *res, int fd)
+{
+	ssize_t	read_size;
+	char	*tmp;
+
+	read_size = read(fd, buf, BUFFER_SIZE);
+	if (read_size == -1)
+		return (0);
+	if (read_size == 0 && res[0] == 0)
+		return (0);
+	buf[read_size] = 0;
+	if (!res)
+		res = ft_strdup(buf);
+	else
+	{
+		tmp = res;
+		res = ft_strjoin(res, buf);
+		ft_free(tmp);
+	}
+	return (res);
 }
 
 char	*get_next_line(int fd)
