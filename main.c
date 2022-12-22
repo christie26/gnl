@@ -9,6 +9,6 @@ int	main(int ac, char **av)
 
 	(void)ac;
 	fd = open(av[1], O_RDONLY);
-	res = get_next_line(fd);
+	res = get_next_line(-1);
 	printf("result is %s\n", res);
 }

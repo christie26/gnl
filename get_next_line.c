@@ -6,7 +6,7 @@
 /*   By: yoonsele <yoonsele@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/03 12:00:07 by yoonsele          #+#    #+#             */
-/*   Updated: 2022/12/15 17:08:05 by yoonsele         ###   ########.fr       */
+/*   Updated: 2022/12/22 15:34:24 by yoonsele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,26 +20,30 @@ char	*ft_free(char *buf)
 	return (0);
 }
 
-char	*ft_read_buffer(char *buf, char *res, int fd)
+char	*ft_read_buffer(char *buf, char *sto, int fd)
 {
 	ssize_t	read_size;
 	char	*tmp;
 
-	read_size = read(fd, buf, BUFFER_SIZE);
+	while (!ft_strchr(sto, '\n'))
+	{
+		read_size = read(fd, buf, BUFFER_SIZE);
+		if (read_size <= 0)
+			break ;
+		buf[read_size] = 0;
+		tmp = sto;
+		sto = ft_strjoin(sto, buf);
+		ft_free(tmp);
+		if (!sto)
+			return (0);
+		if (read_size < BUFFER_SIZE)
+			break ;
+	}
 	if (read_size == -1)
 		return (0);
-	if (read_size == 0 && res[0] == 0)
+	if (read_size == 0 && sto[0] == 0)
 		return (0);
-	buf[read_size] = 0;
-	if (!res)
-		res = ft_strdup(buf);
-	else
-	{
-		tmp = res;
-		res = ft_strjoin(res, buf);
-		ft_free(tmp);
-	}
-	return (res);
+	return (sto);
 }
 
 char	*get_next_line(int fd)
@@ -52,20 +56,29 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || fd > OPEN_MAX || BUFFER_SIZE <= 0)
 		return (0);
+	if (!sto)
+	{
+		sto = ft_strdup("");
+		if (!sto)
+			return (0);
+	}
 	buf = (char *)malloc(BUFFER_SIZE + 1);
 	if (!buf)
 		return (0);
-	while (!ft_strchr(buf, '\n'))
+	tmp = ft_read_buffer(buf, sto, fd);
+	if (!tmp)
 	{
-		sto = ft_read_buffer(buf, sto, fd);
-		if (!sto)
-			return (ft_free(buf));
+		ft_free(buf);
+		return (ft_free(sto));
 	}
+	sto = tmp;
 	ft_free(buf);
 	tmp = sto;
-	n = ft_strchr(sto, '\n') - sto;
-	line = ft_substr(sto, 0, n);
-	sto = ft_substr(sto, n, ft_strlen(sto));
+	n = 0;
+	while (sto[n] && sto[n] != '\n')
+		n++;
+	line = ft_substr(sto, 0, n + 1);
+	sto = ft_substr(sto, n + 1, ft_strlen(sto) - n - 1);
 	free(tmp);
 	return (line);
 }
