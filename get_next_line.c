@@ -12,42 +12,42 @@
 
 #include "get_next_line.h"
 
-char	*ft_read_buffer(char *buf, char *sto, int fd)
+char	*ft_read_buffer(char *buf, char *storage, int fd)
 {
 	ssize_t	read_size;
 	char	*tmp;
 
-	while (!ft_strchr(sto, '\n'))
+	while (!ft_strchr(storage, '\n'))
 	{
 		read_size = read(fd, buf, BUFFER_SIZE);
 		if (read_size <= 0)
 			break ;
 		buf[read_size] = 0;
-		tmp = sto;
-		sto = ft_strjoin(sto, buf);
+		tmp = storage;
+		storage = ft_strjoin(storage, buf);
 		free(tmp);
-		if (!sto)
+		if (!storage)
 			return (0);
 		if (read_size < BUFFER_SIZE)
 			break ;
 	}
 	if (read_size == -1)
 		return (0);
-	if (read_size == 0 && sto[0] == 0)
+	if (read_size == 0 && storage[0] == 0)
 		return (0);
-	return (sto);
+	return (storage);
 }
 
-char	*ft_get_line(char **sto)
+char	*ft_get_line(char **storage)
 {
 	size_t	n;
 	char	*line;
 
 	n = 0;
-	while ((*sto)[n] && (*sto)[n] != '\n')
+	while ((*storage)[n] && (*storage)[n] != '\n')
 		n++;
-	line = ft_substr(*sto, 0, n + 1);
-	*sto = ft_substr(*sto, n + 1, ft_strlen(*sto) - n - 1);
+	line = ft_substr(*storage, 0, n + 1);
+	*storage = ft_substr(*storage, n + 1, ft_strlen(*storage) - n - 1);
 	return (line);
 }
 
@@ -62,27 +62,27 @@ char	*ft_free(char **buf1, char **buf2)
 
 char	*get_next_line(int fd)
 {
-	static char	*sto;
+	static char	*storage;
 	char		*buf;
 	char		*line;
 	char		*tmp;
 
 	if (fd < 0 || fd > OPEN_MAX || BUFFER_SIZE <= 0)
 		return (0);
-	if (!sto)
+	if (!storage)
 	{
-		sto = ft_strdup("");
-		if (!sto)
+		storage = ft_strdup("");
+		if (!storage)
 			return (0);
 	}
 	buf = (char *)malloc(BUFFER_SIZE + 1);
 	if (!buf)
 		return (0);
-	tmp = ft_read_buffer(buf, sto, fd);
+	tmp = ft_read_buffer(buf, storage, fd);
 	if (!tmp)
-		return (ft_free(&buf, &sto));
-	sto = tmp;
-	line = ft_get_line(&sto);
+		return (ft_free(&buf, &storage));
+	storage = tmp;
+	line = ft_get_line(&storage);
 	ft_free(&buf, &tmp);
 	return (line);
 }
