@@ -6,7 +6,7 @@
 /*   By: yoonsele <yoonsele@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 15:45:03 by yoonsele          #+#    #+#             */
-/*   Updated: 2022/12/22 16:59:48 by yoonsele         ###   ########.fr       */
+/*   Updated: 2022/12/22 17:46:29 by yoonsele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,9 @@ int	main(int ac, char **av)
 
 	(void)ac;
 	fd = open(av[1], O_RDONLY);
-	
 	res = get_next_line(fd);
 	printf("%s\n", res);
 	ft_free(res);
-	
 	res = get_next_line(fd);
 	printf("%s\n", res);
 	ft_free(res);

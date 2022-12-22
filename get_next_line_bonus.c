@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoonsele <yoonsele@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/03 12:00:07 by yoonsele          #+#    #+#             */
-/*   Updated: 2022/12/22 17:26:30 by yoonsele         ###   ########.fr       */
+/*   Updated: 2022/12/22 17:41:33 by yoonsele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*ft_read_buffer(char *buf, char *sto, int fd)
 {
@@ -62,27 +62,27 @@ char	*ft_free(char **buf1, char **buf2)
 
 char	*get_next_line(int fd)
 {
-	static char	*sto;
+	static char	*sto[OPEN_MAX];
 	char		*buf;
 	char		*line;
 	char		*tmp;
 
 	if (fd < 0 || fd > OPEN_MAX || BUFFER_SIZE <= 0)
 		return (0);
-	if (!sto)
+	if (!sto[fd])
 	{
-		sto = ft_strdup("");
-		if (!sto)
+		sto[fd] = ft_strdup("");
+		if (!sto[fd])
 			return (0);
 	}
 	buf = (char *)malloc(BUFFER_SIZE + 1);
 	if (!buf)
 		return (0);
-	tmp = ft_read_buffer(buf, sto, fd);
+	tmp = ft_read_buffer(buf, sto[fd], fd);
 	if (!tmp)
-		return (ft_free(&buf, &sto));
-	sto = tmp;
-	line = ft_get_line(&sto);
+		return (ft_free(&buf, &sto[fd]));
+	sto[fd] = tmp;
+	line = ft_get_line(&sto[fd]);
 	ft_free(&buf, &tmp);
 	return (line);
 }
