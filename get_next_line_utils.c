@@ -6,7 +6,7 @@
 /*   By: yoonsele <yoonsele@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/03 12:00:37 by yoonsele          #+#    #+#             */
-/*   Updated: 2022/12/22 15:31:40 by yoonsele         ###   ########.fr       */
+/*   Updated: 2022/12/22 17:10:04 by yoonsele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,6 @@ char	*ft_strjoin(char *s1, char *s2)
 		*(dst++) = *(s1++);
 	while (len_s2--)
 		*(dst++) = *(s2++);
-//	free((void *)s1);
-//	s1 = 0;
 	*dst = 0;
 	dst -= total;
 	return (dst);

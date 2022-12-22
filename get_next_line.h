@@ -6,7 +6,7 @@
 /*   By: yoonsele <yoonsele@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/03 12:00:22 by yoonsele          #+#    #+#             */
-/*   Updated: 2022/12/22 13:01:45 by yoonsele         ###   ########.fr       */
+/*   Updated: 2022/12/22 17:21:59 by yoonsele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ char	*ft_strdup(char *src);
 char	*ft_strndup(char *src);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strjoin(char *s1, char *s2);
+char	*ft_free(char **buf1, char **buf2);
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 4

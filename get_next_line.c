@@ -6,19 +6,11 @@
 /*   By: yoonsele <yoonsele@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/03 12:00:07 by yoonsele          #+#    #+#             */
-/*   Updated: 2022/12/22 15:34:24 by yoonsele         ###   ########.fr       */
+/*   Updated: 2022/12/22 17:22:26 by yoonsele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
-
-char	*ft_free(char *buf)
-{
-	free(buf);
-	buf = 0;
-	return (0);
-}
 
 char	*ft_read_buffer(char *buf, char *sto, int fd)
 {
@@ -33,7 +25,7 @@ char	*ft_read_buffer(char *buf, char *sto, int fd)
 		buf[read_size] = 0;
 		tmp = sto;
 		sto = ft_strjoin(sto, buf);
-		ft_free(tmp);
+		free(tmp);
 		if (!sto)
 			return (0);
 		if (read_size < BUFFER_SIZE)
@@ -46,13 +38,34 @@ char	*ft_read_buffer(char *buf, char *sto, int fd)
 	return (sto);
 }
 
+char	*ft_get_line(char **sto)
+{
+	size_t	n;
+	char	*line;
+
+	n = 0;
+	while ((*sto)[n] && (*sto)[n] != '\n')
+		n++;
+	line = ft_substr(*sto, 0, n + 1);
+	*sto = ft_substr(*sto, n + 1, ft_strlen(*sto) - n - 1);
+	return (line);
+}
+
+char	*ft_free(char **buf1, char **buf2)
+{
+	free(*buf1);
+	*buf1 = 0;
+	free(*buf2);
+	*buf2 = 0;
+	return (0);
+}
+
 char	*get_next_line(int fd)
 {
 	static char	*sto;
 	char		*buf;
 	char		*line;
 	char		*tmp;
-	size_t		n;
 
 	if (fd < 0 || fd > OPEN_MAX || BUFFER_SIZE <= 0)
 		return (0);
@@ -67,18 +80,9 @@ char	*get_next_line(int fd)
 		return (0);
 	tmp = ft_read_buffer(buf, sto, fd);
 	if (!tmp)
-	{
-		ft_free(buf);
-		return (ft_free(sto));
-	}
+		return (ft_free(&buf, &sto));
 	sto = tmp;
-	ft_free(buf);
-	tmp = sto;
-	n = 0;
-	while (sto[n] && sto[n] != '\n')
-		n++;
-	line = ft_substr(sto, 0, n + 1);
-	sto = ft_substr(sto, n + 1, ft_strlen(sto) - n - 1);
-	free(tmp);
+	line = ft_get_line(&sto);
+	ft_free(&buf, &tmp);
 	return (line);
 }
